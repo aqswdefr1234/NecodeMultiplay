@@ -22,6 +22,7 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
 {
     public TMP_InputField inputField_Nickname;
     public TMP_Text UI_Nickname;
+    public string onNetworkSpawn_PlayerName;
     const int m_MaxConnections = 30;
     private string RelayJoinCode;
     public TMP_Text ShowingJoinCode;
@@ -44,6 +45,7 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
         else
         {
             UI_Nickname.text = inputField_Nickname.text;
+            onNetworkSpawn_PlayerName = UI_Nickname.text;
             BtnPanel.SetActive(false);
             await AllocateRelayServerAndGetJoinCode(m_MaxConnections);
             StartCoroutine(ConfigureTransportAndStartNgoAsHost());
@@ -70,6 +72,7 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
         else
         {
             UI_Nickname.text = inputField_Nickname.text;
+            onNetworkSpawn_PlayerName = UI_Nickname.text;
             joinUserObject.SetActive(true);
             BtnPanel.SetActive(false);
         }

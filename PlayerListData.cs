@@ -6,7 +6,7 @@ public class PlayerListData : MonoBehaviour //호스트가아닌 클라이언트 오너 입장�
 {
     public List<GameObject> shoppingPlayers = new List<GameObject>();
     public List<GameObject> room1Players = new List<GameObject>();
-    public int ownerSceneNumber_;
+    public int ownerSceneNumber_ = -1;
 
     void Awake()
     {
