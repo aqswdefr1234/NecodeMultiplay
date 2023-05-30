@@ -1,4 +1,4 @@
-# MetaShopping
+# NecodeMultiplay
 이 프로젝트는 Unity Netcode 기반의 1인칭 멀티플레이 프로젝트입니다.
 Unity Gaming Services 의 Relay 서버를 사용하였습니다.
 이 프로젝트의 특징은 멀티플레이 중에 본인의 플레이어(오너)를 기준으로
