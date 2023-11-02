@@ -20,20 +20,20 @@ using Random = UnityEngine.Random;
 
 public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/en/manual/relay-and-ngo
 {
+    const int m_MaxConnections = 30;
+    
     public TMP_InputField inputField_Nickname;
     public TMP_Text UI_Nickname;
     public string onNetworkSpawn_PlayerName;
-    const int m_MaxConnections = 30;
-    private string RelayJoinCode;
     public TMP_Text ShowingJoinCode;
     public TMP_InputField inputField;
-    
     public GameObject joinUserObject;
     public GameObject BtnPanel;
     
+    private string RelayJoinCode;
+    
     void Start()
     {
-        Debug.Log("start");
         AuthenticatingAPlayer();
     }
     public async void RelayHostStart()
@@ -51,7 +51,7 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
             StartCoroutine(ConfigureTransportAndStartNgoAsHost());
         }
     }
-    public void JoinCodeInputFieldActivation() //Á¶ÀÎÀ¯Àú ¿ÀºêÁ§Æ®ÀÇ ¿£ÅÍ¹öÆ° ÀÌº¥Æ®
+    public void JoinCodeInputFieldActivation() //ì¡°ì¸ìœ ì € ì˜¤ë¸Œì íŠ¸ì˜ ì—”í„°ë²„íŠ¼ ì´ë²¤íŠ¸
     {
         RelayJoinCode = inputField.text;
         if (RelayJoinCode != "")
@@ -63,7 +63,7 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
             ShowingJoinCode.text = "This is incorrect information.";
         }
     }
-    public void JoinCodeBtn()//¹öÆ° ÆÐ³ÎÀÇ Á¶ÀÎ ¹öÆ° ÀÌº¥Æ®
+    public void JoinCodeBtn()//ë²„íŠ¼ íŒ¨ë„ì˜ ì¡°ì¸ ë²„íŠ¼ ì´ë²¤íŠ¸
     {
         if (inputField_Nickname.text == "")
         {
@@ -128,10 +128,8 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
     }
     IEnumerator ConfigureTransportAndStartNgoAsHost()
     {
-        Debug.Log("Before while");
-        Debug.Log("ConfigureTransportAndStartNgoAsHost()");
         var serverRelayUtilityTask = AllocateRelayServerAndGetJoinCode(m_MaxConnections);
-        while (!serverRelayUtilityTask.IsCompleted)//Á¢¼Ó¿Ï·áµÇ¸é false, ¾ÆÁ÷ ¾ÈµÆÀ¸¸é true (while¹® Á¶°Ç °Ë»ç->while ¹® ½ÇÇà   ----> ¹«ÇÑ¹Ýº¹)
+        while (!serverRelayUtilityTask.IsCompleted)//ì ‘ì†ì™„ë£Œë˜ë©´ false, ì•„ì§ ì•ˆëìœ¼ë©´ true (whileë¬¸ ì¡°ê±´ ê²€ì‚¬->while ë¬¸ ì‹¤í–‰   ----> ë¬´í•œë°˜ë³µ)
         {
             yield return null;
         }
@@ -140,15 +138,10 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
             Debug.LogError("Exception thrown when attempting to start Relay Server. Server not started. Exception: " + serverRelayUtilityTask.Exception.Message);
             yield break;
         }
-        Debug.Log("End while");
         var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverRelayUtilityTask.Result;
 
-        // Display the join code to the user.
-
-        // The .GetComponent method returns a UTP NetworkDriver (or a proxy to it)
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
         NetworkManager.Singleton.StartHost();
-        //Instantiate(playerPrefab);
         ShowingJoinCode.text = joinCode;
         RelayJoinCode = joinCode;
         Debug.Log(joinCode);
@@ -177,7 +170,6 @@ public class RelayServerManager : MonoBehaviour //https://docs.unity.com/relay/e
     }
     IEnumerator ConfigreTransportAndStartNgoAsConnectingPlayer()
     {
-        Debug.Log("ConfigreTransportAndStartNgoAsConnectingPlayer()");
         // Populate RelayJoinCode beforehand through the UI
         var clientRelayUtilityTask = JoinRelayServerFromJoinCode(RelayJoinCode);
 
