@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStop_Wall : MonoBehaviour
+public class PlayerStop_Wall : MonoBehaviour//ë²½ê³¼ ë¶€ë”ªì¹˜ë©´ ë©ˆì¶”ë„ë¡
 {
     private int trigger = 0;
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Äİ¸®Àüenter ÀÛµ¿Áß");
         if(trigger == 0)
         {
-            if (other.collider.CompareTag("Player")) //Æ®¸®°Å¿¡¼­´Â other.tga == ·Î °£´ÜÇÏ°Ô ÅÂ±× »ç¿ë°¡´É
+            if (other.collider.CompareTag("Player")) //íŠ¸ë¦¬ê±°ì—ì„œëŠ” other.tga == ë¡œ ê°„ë‹¨í•˜ê²Œ íƒœê·¸ ì‚¬ìš©ê°€ëŠ¥
             {
                 other.transform.parent.GetComponent<PlayerMoveAndCamera>().speedSetting = 1f;
                 trigger = 1;
@@ -19,7 +18,7 @@ public class PlayerStop_Wall : MonoBehaviour
     }
     void OnCollisionExit(Collision other)
     {
-        Debug.Log("Äİ¸®Àüexit ÀÛµ¿Áß");
+        Debug.Log("ì½œë¦¬ì „exit ì‘ë™ì¤‘");
         if (trigger == 1)
         {
             if (other.collider.CompareTag("Player"))
