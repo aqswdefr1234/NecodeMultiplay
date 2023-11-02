@@ -5,15 +5,18 @@ using Unity.Netcode;
 
 public class PlayerMoveAndCamera : NetworkBehaviour 
 {
-    private GameObject followCamera;
+    
     public float speedSetting;
     public float turnSpeed;
+    public GameObject myLocalObject;
+    
+    private GameObject followCamera;
     private Rigidbody myRigid;
     private float xRotate;
     private float yRotateSize;
     private float yRotate;
     private float xRotateSize;
-    public GameObject myLocalObject;
+    
     void Start()
     {
         followCamera = GameObject.Find("FollowCamera");
@@ -27,8 +30,8 @@ public class PlayerMoveAndCamera : NetworkBehaviour
         FollowCamera();
         PlayerMove_keybord();
         Look();
-        //ÀÌ°ÍÀº ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ® ¸¶´Ù ºÙ¾îÀÖÀ¸¹Ç·Î ¹æÀ» ¸¸µé¾úÀ» ¶§ Ä«¸Ş¶ó°¡ ÇØ´ç ÇÃ·¹ÀÌ¾î¸¦ µû¶ó ¿Â´Ù°í ÇØµµ , ´Ù¸¥ À¯Àú°¡ µé¾î¿À¸é ·ÎÄÃÇÃ·¹ÀÌ¾îÀÇ ¾À¿¡¼­µµ ´Ù¸¥À¯Àú¿¡ ºÙ¾îÀÖ´Â ½ºÅ©¸³Æ®°¡ ÀÛµ¿µÈ´Ù.
-        //°¢ À¯ÀúÀÇ ¾À¸¶´Ù Ä«¸Ş¶ó°¡ ÇÏ³ª¾¿ ÀÖ´Ù°í ÇØµµ ¿À³ÊÇÃ·¹ÀÌ¾î ÀÔÀå¿¡¼­´Â 2¸íÀ¸·Î Ãë±ŞµÇ±â¶§¹®¿¡!IsOwner°¡ ÇÊ¿äÇÏ´Ù.
+        //ì´ê²ƒì€ í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ ë§ˆë‹¤ ë¶™ì–´ìˆìœ¼ë¯€ë¡œ ë°©ì„ ë§Œë“¤ì—ˆì„ ë•Œ ì¹´ë©”ë¼ê°€ í•´ë‹¹ í”Œë ˆì´ì–´ë¥¼ ë”°ë¼ ì˜¨ë‹¤ê³  í•´ë„ , ë‹¤ë¥¸ ìœ ì €ê°€ ë“¤ì–´ì˜¤ë©´ ë¡œì»¬í”Œë ˆì´ì–´ì˜ ì”¬ì—ì„œë„ ë‹¤ë¥¸ìœ ì €ì— ë¶™ì–´ìˆëŠ” ìŠ¤í¬ë¦½íŠ¸ê°€ ì‘ë™ëœë‹¤.
+        //ê° ìœ ì €ì˜ ì”¬ë§ˆë‹¤ ì¹´ë©”ë¼ê°€ í•˜ë‚˜ì”© ìˆë‹¤ê³  í•´ë„ ì˜¤ë„ˆí”Œë ˆì´ì–´ ì…ì¥ì—ì„œëŠ” 2ëª…ìœ¼ë¡œ ì·¨ê¸‰ë˜ê¸°ë•Œë¬¸ì—!IsOwnerê°€ í•„ìš”í•˜ë‹¤.
     }
     void FollowCamera()
     {
@@ -38,16 +41,16 @@ public class PlayerMoveAndCamera : NetworkBehaviour
     {
         float hAxis = Input.GetAxisRaw("Horizontal");
         float vAxis = Input.GetAxisRaw("Vertical");
-        Vector3 moveVec = (hAxis * myLocalObject.transform.right + vAxis * myLocalObject.transform.forward).normalized;//transform.right ´Â ¹Ù¶óº¸´Â ¹æÇâ ±âÁØ ¿À¸¥Æí                                                                                   //transform.forward´Â ¹Ù¶óº¸´Â ¹æÇâ ±âÁØ Á¤¸é
+        Vector3 moveVec = (hAxis * myLocalObject.transform.right + vAxis * myLocalObject.transform.forward).normalized;//transform.right ëŠ” ë°”ë¼ë³´ëŠ” ë°©í–¥ ê¸°ì¤€ ì˜¤ë¥¸í¸                                                                                   //transform.forwardëŠ” ë°”ë¼ë³´ëŠ” ë°©í–¥ ê¸°ì¤€ ì •ë©´
         myLocalObject.transform.position = (myLocalObject.transform.position + moveVec * speedSetting * Time.deltaTime);//https://docs.unity3d.com/ScriptReference/Rigidbody.MovePosition.html
     }
     private void Look()//https://itadventure.tistory.com/390
     {
         yRotateSize = Input.GetAxis("Mouse X") * turnSpeed;
         yRotate = myLocalObject.transform.eulerAngles.y + yRotateSize;
-        xRotateSize = -Input.GetAxis("Mouse Y") * turnSpeed; //ÇÃ·¹ÀÌ¾î°¡ ÇÏ´ÃÀ» ¹Ù¶óº¸·Á¸é Rotation x°¡ À½¼ö°¡ µÇ¾î¾ß ÇÏ¹Ç·Î Input.GetAxis("Mouse Y") °ªÀ» À½¼ö·Î ¹Ù²ãÁØ´Ù.
+        xRotateSize = -Input.GetAxis("Mouse Y") * turnSpeed; //í”Œë ˆì´ì–´ê°€ í•˜ëŠ˜ì„ ë°”ë¼ë³´ë ¤ë©´ Rotation xê°€ ìŒìˆ˜ê°€ ë˜ì–´ì•¼ í•˜ë¯€ë¡œ Input.GetAxis("Mouse Y") ê°’ì„ ìŒìˆ˜ë¡œ ë°”ê¿”ì¤€ë‹¤.
         xRotate = Mathf.Clamp(xRotate + xRotateSize, -45, 80);
         followCamera.transform.eulerAngles = new Vector3(xRotate, yRotate, 0);
-        myLocalObject.transform.eulerAngles = new Vector3(0, yRotate, 0); //¹Ù¶óº¸´Â ¹æÇâÀÇ y°ª¸¸ ¹Ş¾Æ¿Í ÇÃ·¹ÀÌ¾î°¡ ¹Ù¶óº¸´Â ¹æÇâ°ú ¶È°°ÀÌ È¸Àü½ÃÄÑÁØ´Ù.
+        myLocalObject.transform.eulerAngles = new Vector3(0, yRotate, 0); //ë°”ë¼ë³´ëŠ” ë°©í–¥ì˜ yê°’ë§Œ ë°›ì•„ì™€ í”Œë ˆì´ì–´ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ê³¼ ë˜‘ê°™ì´ íšŒì „ì‹œì¼œì¤€ë‹¤.
     }
 }
